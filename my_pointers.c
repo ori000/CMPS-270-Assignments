@@ -67,6 +67,36 @@ int checkA2 = 0;
 int checkSubA1 = 0;
 int checkSubA2 = 0;
 
+int min(int n1, int n2)
+{
+    if(n1 > n2)
+    {
+        checkA1 = 1;
+        return n2;
+    }
+    else if(n2 > n1)
+    {
+        checkA2 = 1;
+        return n1;
+    }
+    else return 0;
+}
+
+int max(int n1, int n2)
+{
+    if(n1 > n2)
+    {
+        checkSubA1 = 1;
+        return n1;
+    }
+    else if(n2 > n1)
+    {
+        checkSubA2 = 1;
+        return n2;
+    }
+}
+
+
 int main()
 {
     char* a1[] = {"ab", "ac"};
@@ -86,7 +116,8 @@ int main()
 
 void merge(char* a1[], char* a2[], int sizeA1, int sizeA2)
 {
-    char* a3[] = (char*)malloc(sizeof(char)*(sizeA1 + sizeA2));
+    // char* a3[] = (char*)malloc(sizeof(char)*(sizeA1 + sizeA2));
+    char* a3[7];
 
     if(sizeA1 == sizeA2)
     {
@@ -187,30 +218,30 @@ void merge(char* a1[], char* a2[], int sizeA1, int sizeA2)
         printf("%s ", a3[i]);
 }
 
-int min(int n1, int n2)
-{
-    if(n1 > n2)
-    {
-        checkA1 = 1;
-        return n2;
-    }
-    else if(n2 > n1)
-    {
-        checkA2 = 1;
-        return n1;
-    }
-}
+// int min(int n1, int n2)
+// {
+//     if(n1 > n2)
+//     {
+//         checkA1 = 1;
+//         return n2;
+//     }
+//     else if(n2 > n1)
+//     {
+//         checkA2 = 1;
+//         return n1;
+//     }
+// }
 
-int max(int n1, int n2)
-{
-    if(n1 > n2)
-    {
-        checkSubA1 = 1;
-        return n1;
-    }
-    else if(n2 > n1)
-    {
-        checkSubA2 = 1;
-        return n2;
-    }
-}
+// int max(int n1, int n2)
+// {
+//     if(n1 > n2)
+//     {
+//         checkSubA1 = 1;
+//         return n1;
+//     }
+//     else if(n2 > n1)
+//     {
+//         checkSubA2 = 1;
+//         return n2;
+//     }
+// }

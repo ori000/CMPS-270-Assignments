@@ -64,36 +64,76 @@
 //     return countDifference;
 // }
 
+/*
+Test Case 1: Positive input =>
+
+Test Case 2: Non-positive input =>
+
+Test Case 3: Non-integral input =>
+
+Test Case 4: Two equal input => difference: 0
+
+Test Case 5:
+*/
+
 void findHammingDist(int* n1, int* n2);
 
 int main()
 {
     int n1, n2;
+    int countOne, countTwo;
+
+    printf("Input two integers: \n");
     scanf_s("%d", &n1);
     scanf_s("%d", &n2);
-    while(n1 > -1 && n2 > -1)
+
+    if(n1 > 0 && n2 > 0)
     {
-        if(sizeof(n1) != sizeof(int) || sizeof(n2) != sizeof(int))
-            break;
-        else
+        for(int i = 0; i < n1; i++)
+            countOne++;
+        for(int i = 0; i < n2; i++)
+            countTwo++;
+
+        while(n1 > -1 && n2 > -1)
         {
-            findHammingDist(&n1, &n2);
-            scanf_s("%d", &n1);
-            scanf_s("%d", &n2);
+            printf("%d %d   %d %d", sizeof(n1), (countOne*sizeof(int)), sizeof(n2), (countTwo*sizeof(int)));
+            if(sizeof(n1) != (countOne*sizeof(int)) || sizeof(n2) != (countTwo*sizeof(int)))
+                break;
+            else
+            {
+                findHammingDist(&n1, &n2);
+                scanf_s("%d", &n1);
+                scanf_s("%d", &n2);
+            }
         }
+    }
+    else
+    {
+        printf("Invalid input: \n");
+        scanf_s("%d", &n1);
+        scanf_s("%d", &n2);
     }
 }
+
+/*
+REQUIRES: Two positive integer inputs
+EFFECTS: Prints the difference between the binary representation of the two positive integral inputs
+*/
 void findHammingDist(int* n1, int* n2)
 {
-    int countDifference = 0;
-    while(*n1 > 0 || *n2 > 0)
+    if(*n1 > 0 && *n2 > 0)
     {
-        if(*n1 % 2 != *n2 % 2)
+        int countDifference = 0;
+        while(*n1 > 0 || *n2 > 0)
         {
-            countDifference++;
+            if(*n1 % 2 != *n2 % 2)
+            {
+                countDifference++;
+            }
+            *n1 /= 2;
+            *n2 /= 2;
         }
-        *n1 /= 2;
-        *n2 /= 2;
+        printf("%d\n", countDifference);
     }
-    printf("%d\n", countDifference);
+    else printf("Invalid numbers\n");
 }
