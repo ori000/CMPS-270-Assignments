@@ -18,59 +18,6 @@ TEST CASE 5: 1D array of positive integers other than 1, 2, 3 => check (Limited 
 
 int max(int n1, int n2);
 
-int main()
-{
-    //Test Case: 1
-    int a[SIZE] = {1,1,1,2,2,2,3,1,1,1};
-    //Test Case: 2
-    int b[SIZE];
-    //Test Case: 3
-    int c[SIZE] = {-1,-1,-1,-2,-2,-2,-3,-1,-1,-1};
-    //Test Case: 5
-    int d[SIZE] = {4,4,4,2,2,2,3,3,3,2};
-
-    printArray(a);
-    arrayHistogram(a);
-    swapValues(a, 0, 3);
-    printer(a);
-    bubbleSort(a);
-    median(a);
-    mode(a);
-    isSorted(a, SIZE);
-    printer(a);
-
-    // printArray(b);
-    // arrayHistogram(b);
-    // swapValues(b, 0, 3);
-    // printer(b);
-    // bubbleSort(b);
-    // median(b);
-    // mode(b);
-    // isSorted(b, SIZE);
-    // printer(b);
-
-    // printArray(c);
-    // arrayHistogram(c);
-    // swapValues(c, 0, 3);
-    // printer(c);
-    // bubbleSort(c);
-    // median(c);
-    // mode(c);
-    // isSorted(c, SIZE);
-    // printer(c);
-
-    // printArray(d);
-    // arrayHistogram(d);
-    // swapValues(d, 0, 3);
-    // printer(d);
-    // bubbleSort(d);
-    // median(d);
-    // mode(d);
-    // isSorted(d, SIZE);
-    // printer(d);
-
-    return 0;
-}
 
 /*
 REQUIRES: 1D array of POSITIVE integers
@@ -220,7 +167,7 @@ REQUIRES: non-empty 1D array of positive integers and the max function to check 
 EFFECTS: prints mode
 */
 
-void mode(int* array)
+int mode(int* array)
 {
     int countOne = 0, countTwo = 0, countThree = 0;
     int Max = 0;
@@ -244,6 +191,7 @@ void mode(int* array)
         printf("Mode: %d\n", Max);
     }
     else printf("Invalid array\n");
+    return Max;
 }
 
 /*
@@ -278,4 +226,58 @@ EFFECTS: returns max of two inputs
 int max(int n1, int n2)
 {
     return (n1 > n2) ? n1:n2;
+}
+
+int main()
+{
+    //Test Case: 1
+    int a[SIZE] = {1,1,1,2,2,2,3,1,1,1};
+    //Test Case: 2
+    int b[SIZE];
+    //Test Case: 3
+    int c[SIZE] = {-1,-1,-1,-2,-2,-2,-3,-1,-1,-1};
+    //Test Case: 5
+    int d[SIZE] = {4,4,4,2,2,2,3,3,3,2};
+
+    printArray(a);
+    arrayHistogram(a);
+    swapValues(a, 0, 3);
+    printer(a);
+    bubbleSort(a);
+    median(a);
+    mode(a);
+    isSorted(a, SIZE);
+    printer(a);
+
+    // printArray(b);
+    // arrayHistogram(b);
+    // swapValues(b, 0, 3);
+    // printer(b);
+    // bubbleSort(b);
+    // median(b);
+    // mode(b);
+    // isSorted(b, SIZE);
+    // printer(b);
+
+    // printArray(c);
+    // arrayHistogram(c);
+    // swapValues(c, 0, 3);
+    // printer(c);
+    // bubbleSort(c);
+    // median(c);
+    // mode(c);
+    // isSorted(c, SIZE);
+    // printer(c);
+
+    // printArray(d);
+    // arrayHistogram(d);
+    // swapValues(d, 0, 3);
+    // printer(d);
+    // bubbleSort(d);
+    // median(d);
+    // mode(d);
+    // isSorted(d, SIZE);
+    // printer(d);
+
+    return 0;
 }
