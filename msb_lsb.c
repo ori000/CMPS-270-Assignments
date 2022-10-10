@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 unsigned int msb(int* v);
 unsigned int lsb(int* v);
@@ -29,6 +30,7 @@ int main()
     {
     printf("msb: %d\n", msb(&value));
     printf("lsb: %d\n", lsb(&value));
+    printf("Difference: %d", abs(msb(&value) - lsb(&value)));
     }
     else printf("Invalid input");
 }
