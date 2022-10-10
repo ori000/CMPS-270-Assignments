@@ -7,7 +7,7 @@
 /*
 TEST CASE 1: 1D array of unsigned positive ints of 3 types only (1,2,3) => check
 
-TEST CASE 2: empty 1D array => Invalid array / check
+TEST CASE 2: empty 1D array => Invalid array / check 
 
 TEST CASE 3: 1D array of non-positive integers => check (Limited to median and sorting only)
 
@@ -20,7 +20,14 @@ int max(int n1, int n2);
 
 int main()
 {
+    //Test Case: 1
     int a[SIZE] = {1,1,1,2,2,2,3,1,1,1};
+    //Test Case: 2
+    int b[SIZE];
+    //Test Case: 3
+    int c[SIZE] = {-1,-1,-1,-2,-2,-2,-3,-1,-1,-1};
+    //Test Case: 5
+    int d[SIZE] = {4,4,4,2,2,2,3,3,3,2};
 
     printArray(a);
     arrayHistogram(a);
@@ -31,6 +38,36 @@ int main()
     mode(a);
     isSorted(a, SIZE);
     printer(a);
+
+    // printArray(b);
+    // arrayHistogram(b);
+    // swapValues(b, 0, 3);
+    // printer(b);
+    // bubbleSort(b);
+    // median(b);
+    // mode(b);
+    // isSorted(b, SIZE);
+    // printer(b);
+
+    // printArray(c);
+    // arrayHistogram(c);
+    // swapValues(c, 0, 3);
+    // printer(c);
+    // bubbleSort(c);
+    // median(c);
+    // mode(c);
+    // isSorted(c, SIZE);
+    // printer(c);
+
+    // printArray(d);
+    // arrayHistogram(d);
+    // swapValues(d, 0, 3);
+    // printer(d);
+    // bubbleSort(d);
+    // median(d);
+    // mode(d);
+    // isSorted(d, SIZE);
+    // printer(d);
 
     return 0;
 }
@@ -80,13 +117,11 @@ void arrayHistogram(int* a)
     for(int i = 1; i <= 3; i++)
     {
         int count = 0;
-        // char arrayChecker[10];
         for(int j = 0; j < SIZE; j++)
         {
             if(a[j] == i)
             {
                 count++;
-                // arrayChecker[j] = '*';
             }
         }
 
@@ -96,7 +131,6 @@ void arrayHistogram(int* a)
             printf("%c", '*');
 
         printf("\n");
-        // printer(&arrayChecker);
     }
 }
 

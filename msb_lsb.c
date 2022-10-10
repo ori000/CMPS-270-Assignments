@@ -5,23 +5,32 @@ unsigned int msb(int* v);
 unsigned int lsb(int* v);
 
 /*
-TEST CASE 1: Positive integer => check
+TEST CASE 1: Positive integer => checked (e.g., 10)
 
-TEST CASE 2: Same values => check
+TEST CASE 2: Power of 2 => checked (e.g., 4)
 
-TEST CASE 3: Power of 2 => check
+TEST CASE 3: 0 or 1 => checked
 
-TEST CASE 4: 0 or 1 => check
+TEST CASE 4: Negative integer => checked (e.g., -10)
+
+TEST CASE 5: Non integral input  (e.g., "string")
 */
 
+/*
+REQUIRES: 2 valid inputs in order to call the functions (first input checks the validity (i.e., if of type int) and the second one for C's outdated convention)
+
+*/
 int main()
 {
     unsigned int value;
 
     printf("Enter the value in decimal form:\n");
-    scanf("%d \n", &value);
+    if(scanf("%d \n", &value) == 1)
+    {
     printf("msb: %d\n", msb(&value));
     printf("lsb: %d\n", lsb(&value));
+    }
+    else printf("Invalid input");
 }
 
 /*

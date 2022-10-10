@@ -1,117 +1,54 @@
 #include <stdio.h>
-
-
-// int FindHammingDistance(int* n1, int* n2);
-// int main()
-// {
-//     int n1 = 1, n2 = 0;
-
-//     // printf("Enter n1:\n");
-//     // scanf("%d", n1);
-//     // printf("Enter n2:\n");
-//     // scanf("%d", n2);
-
-//     printf("%d",FindHammingDistance(&n1, &n2));
-
-//     return 0;
-// }
-
-// int FindHammingDistance(int* num1, int* num2)
-// {
-//     int a1[8];
-//     int a2[8];
-
-//     for(int index = 0; index < 8; index++)
-//     {
-//         a1[index] = 0;
-//         a2[index] = 0;
-//     }
-
-//     int countDifference = 0;
-//     int z = 0, k = 0, i = 0;
-
-//     printf("\na1: ");
-//     while(a1[z] != '\0')
-//     {
-//         printf("%d ", a1[z]);
-//         z++;
-//     }
-//     printf("\na2: ");
-//     while(a2[k] != '\0')
-//     {
-//         printf("%d ", a2[k]);
-//         k++;
-//     }
-//     printf("\n%d %d\n", z, k);
-
-//     printf("num1 and num2 = %d, %d", *num1, *num2);
-
-//     while(!(*num1 / 2 == 0 && *num2 / 2 == 0))
-//     {
-//         a1[i] = *num1 / 2;
-//         *num1 = *num1 / 2;
-
-//         a2[i] = *num2 / 2;
-//         *num2 = *num2 / 2;
-//         printf("check for loop 1");
-//         i++;
-//     }
-//     for(int j = 7; j >= 0; j--)
-//     {
-//         if(a1[j] != a2[j])
-//             countDifference++;
-//     }
-//     return countDifference;
-// }
+#include <stdlib.h>
+#include<stdbool.h>
+#include <math.h>
 
 /*
-Test Case 1: Positive input =>
+Test Case 1: Positive input => checked print hamming difference (e.g., 0 3 => 2)
 
-Test Case 2: Non-positive input =>
+Test Case 2: Non-positive input => checked break loop (e.g., -1 -2)
 
-Test Case 3: Non-integral input =>
+Test Case 3: Non-integral input => checked break loop (e.g., "string" "string")
 
-Test Case 4: Two equal input => difference: 0
+Test Case 4: Two equal input => difference: 0 => checked print 0 (e.g., 4 4)
 
-Test Case 5:
+Test Case 5: One positive and one negative input => checked break loop (e.g., 4 -2)
+
+Test Case 6: Input is a long or other data types => break loop => checked (e.g., 1231242121413314413 4134322243726852)
 */
 
 void findHammingDist(int* n1, int* n2);
 
+/*
+REQUIRES: nothing
+
+EFFECTS: scans for user input and calls the findHammingDist function (after checking validity of the input)
+*/
 int main()
 {
     int n1, n2;
     int countOne, countTwo;
 
-    printf("Input two integers: \n");
-    scanf_s("%d", &n1);
-    scanf_s("%d", &n2);
+    printf("Input two integers using the following format: n1 n2\n");
 
-    if(n1 > 0 && n2 > 0)
+    if(scanf_s("%d %d", &n1, &n2) == 2 && n1 > -1 && n2 > -1)
     {
-        for(int i = 0; i < n1; i++)
-            countOne++;
-        for(int i = 0; i < n2; i++)
-            countTwo++;
-
+        printf("Checked as a number. Kindly input any int to continue.\n");
         while(n1 > -1 && n2 > -1)
         {
-            printf("%d %d   %d %d", sizeof(n1), (countOne*sizeof(int)), sizeof(n2), (countTwo*sizeof(int)));
-            if(sizeof(n1) != (countOne*sizeof(int)) || sizeof(n2) != (countTwo*sizeof(int)))
-                break;
+            if(scanf_s("%d %d", &n1, &n2) == 2)
+                findHammingDist(&n1, &n2);
             else
             {
-                findHammingDist(&n1, &n2);
-                scanf_s("%d", &n1);
-                scanf_s("%d", &n2);
+                printf("Invalid input, cannot input a non integral value (e.g., char, long)\nAborting");
+                break;
             }
         }
-    }
-    else
+    } 
+    else 
     {
-        printf("Invalid input: \n");
-        scanf_s("%d", &n1);
-        scanf_s("%d", &n2);
+        printf("Invalid input: Not a positive int \n Aborting");
+
     }
 }
 
@@ -121,7 +58,7 @@ EFFECTS: Prints the difference between the binary representation of the two posi
 */
 void findHammingDist(int* n1, int* n2)
 {
-    if(*n1 > 0 && *n2 > 0)
+    if(*n1 >= 0 && *n2 >= 0)
     {
         int countDifference = 0;
         while(*n1 > 0 || *n2 > 0)
@@ -133,7 +70,7 @@ void findHammingDist(int* n1, int* n2)
             *n1 /= 2;
             *n2 /= 2;
         }
-        printf("%d\n", countDifference);
+        printf("Difference: %d\n", countDifference);
     }
-    else printf("Invalid numbers\n");
+    else printf("Invalid numbers, should input positive integers\n");
 }
