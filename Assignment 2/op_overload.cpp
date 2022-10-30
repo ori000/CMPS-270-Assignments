@@ -1,7 +1,28 @@
+//NOTE: ON LINE 77, ON VS CODE IT GIVES AN ERROR IF WE PUT THE TEMPLATE AGAIN(shadow error), HOWEVER, IT WORKS FINE ON VS. I COMMENTED IT ON VS CODE JUST IN CASE
+
 #include <iostream>
 #include <vector>
 #include <typeinfo>
 #include <cstring>
+
+/*
+TEST CASES
+
+TEST CASE 1: Empty stack	=> checked (no errors if valid type)
+TEST CASE 2: pop, top, push, and check if empty for a filled stack of integers	=> checked (no errors if valid)
+TEST CASE 3: pop, top, push, and check if empty for a filled stack of doubles	=> checked (no errors if valid)
+TEST CASE 4: pop, top, push, and check if empty for a filled stack of strings	=> checked (no errors if valid)
+TEST CASE 5: pop, top, push, and check if empty for a filled stack of chars		=> checked (no errors if valid)
+TEST CASE 6: pop, top, push, and check if empty for a stack of bools => TEST FAILS
+TEST CASE 7: add two int/double stacks of same size			=> checked (no errors if valid)
+TEST CASE 8: add two int/double stacks of different size	=> checked (no errors if valid)
+TEST CASE 9: add two string stacks of same 	size			=> checked (no errors if valid)
+TEST CASE 10: add two string stacks of different size		=> checked (no errors if valid)
+TEST CASE 11: add two char stacks of same size				=> checked (no errors if valid)
+TEST CASE 12: add two char stacks of different size			=> checked (no errors if valid)
+TEST CASE 13: add two bool stacks of same size => TEST FAILS
+TEST CASE 14: add two bool stacks of different size => TEST FAILS
+*/
 
 using namespace::std;
 
@@ -12,6 +33,11 @@ private:
 	std::vector<T> stack;
 
 public:
+	/*
+	Requires: nothing
+
+	Effects: returns true if empty, false if not
+	*/
 	bool empty()
 	{
 		if (stack.empty())
@@ -19,90 +45,93 @@ public:
 		else
 			return false;
 	}
+	/*
+	Requires: nothing
+
+	Effects: add an element into the last index of the vector
+	*/
 	void push(const T& item)
 	{
-		/*if (std::strcmp(typeid(item).name(), "bool"))
-		{
-			if (item == true)
-				stack.push_back(1);
-			else
-				stack.push_back(0);
-		}
-		else*/
 			stack.push_back(item);
 	}
+	/*
+	Requires: nothing
+
+	Effects: returns the last element of the stack (vector in this case), or prints invalid if empty
+	*/
 	T& top()
 	{
-		return stack.back();
+			return stack.back();
 	}
+	/*
+	Requires: nothing
+
+	Effects: removes the last element of the stack (vector in this case), or prints invalid if empty
+	*/
 	void pop()
 	{
+		
 		if(stack.size() > 0)
 			stack.pop_back();
 	}
-	template<class T>
-	friend Stack<T> operator + (Stack<T> &s1, Stack<T> &s2);
-	//friend ostream& operator<<(ostream&, const Stack<T>&);
-
-	/*
-	template<class T>
-	Stack<T> operator+ (Stack<T>& const s1, Stack<T>& const s2)
-	{
-		Stack<T> s3;
-		s3.push(s1.pop() + s2.pop());
-		return s3;
-	}*/
+	//template<class T>													UNCOMMENT IF NECESSARY, WORKS WITHOUT IT ON VS CODE AND WORKS WITH OR WITHOUT IT ON VS
+	friend Stack<T> operator + (Stack<T>& s1, Stack<T>& s2);
 };
-	
+	/*
+	Requires: neither of s1 or s2 is of type bool
+
+	Effects: returns a new stack containing the elements of both s1 and s2 chronologically
+	*/
 	template<class T>
 	Stack<T> operator + (Stack<T> &s1, Stack<T> &s2) 
 	{
-		Stack<T> s3;
-		Stack<T> t1;
-		Stack<T> t2;
-		Stack<T> t3;
-		/*
-		while (!s1.empty() || !s2.empty()) 
-		{
-			s3.push(s1.top() + s2.top());
-			t1.push(s1.top());
-			t2.push(s2.top());
-			s1.pop();
-			s2.pop();
-		}
-		*/
-		while (!s2.empty())
-		{
-			t3.push(s2.top());
-			t2.push(s2.top());
-			s2.pop();
-		}
-		while(!s1.empty())
-		{
-			t3.push(s1.top());
-			t1.push(s1.top());
-			s1.pop();
-		}
+			Stack<T> s3;
+			Stack<T> t1;
+			Stack<T> t2;
+			Stack<T> t3;
+			/*
+			while (!s1.empty() || !s2.empty())
+			{
+				s3.push(s1.top() + s2.top());
+				t1.push(s1.top());
+				t2.push(s2.top());
+				s1.pop();
+				s2.pop();
+			}
+			*/
+			while (!s2.empty())
+			{
+				t3.push(s2.top());
+				t2.push(s2.top());
+				s2.pop();
+			}
+			while (!s1.empty())
+			{
+				t3.push(s1.top());
+				t1.push(s1.top());
+				s1.pop();
+			}
+
+			while (!t3.empty())
+			{
+				s3.push(t3.top());
+				t3.pop();
+			}
+
+			while (!t1.empty())
+			{
+				s1.push(t1.top());
+				t1.pop();
+			}
+			while (!t2.empty())
+			{
+				s2.push(t2.top());
+				t2.pop();
+			}
+			return s3;
 		
-		while (!t3.empty()) 
-		{
-			s3.push(t3.top());
-			t3.pop();
-		}
-		
-		while (!t1.empty()) 
-		{
-			s1.push(t1.top());
-			t1.pop();
-		}
-		while (!t2.empty())
-		{
-			s2.push(t2.top());
-			t2.pop();
-		}
-		return s3;
 	}
-/*
+
 int main()
 {
 	Stack<int> stack1;
@@ -132,7 +161,7 @@ int main()
 	stack44.push("two");
 	stack44.push("three");
 
-	
+
 	Stack<bool> stack5;
 	stack5.push(0);
 	stack5.push(1);
@@ -140,8 +169,12 @@ int main()
 	Stack<bool> stack55;
 	stack55.push(0);
 	stack55.push(1);
+
+
+
 	
-	/*
+	
+	
 	while (!stack2.empty())
 	{
 		std::cout << stack2.top() << std::endl;
@@ -155,8 +188,8 @@ int main()
 	}
 	std::cout << std::endl;
 	
-	//Stack<bool> stack6 = stack5 + stack55;
-	Stack<bool> stack7 = stack5 + stack55;
+	//Stack<string> stack6 = stack4 + stack44;		ERROR BY CPP CONVENTION, I PUT A REQUIREMENT IN THE SPECS
+	//Stack<bool> stack7 = stack5 + stack55; 		ERROR BY CPP CONVENTION, I PUT A REQUIREMENT IN THE SPECS
 
 	/*
 	while (!stack6.empty())
@@ -184,6 +217,8 @@ int main()
 		stack7.pop();
 	}
 	std::cout << std::endl;
+	*/
+	/*
 	while (!stack2.empty())
 	{
 		std::cout << stack2.top() << std::endl;
@@ -194,13 +229,8 @@ int main()
 	{
 		std::cout << stack1.top() << std::endl;
 		stack1.pop();
-	}
+	}*/
 
-	return 0;*/
-//}
-/*
-template <class T>
-Stack<T> operator+(Stack<T>& s1, Stack<T>& s2)
-{
-	return Stack<T>();
-}*/
+	//return 0;
+}
+
