@@ -1,104 +1,206 @@
 #include <iostream>
 #include <vector>
+#include <typeinfo>
+#include <cstring>
 
-using namespace std;
-
-/*
-TEST CASES
-
-TEST CASE 1: Empty stack
-TEST CASE 2: pop, top, push, and check if empty for Partially filled stack of integers
-TEST CASE 3: pop, top, push, and check if empty for Partially filled stack of doubles
-TEST CASE 4: pop, top, push, and check if empty for Partially filled stack of strings
-TEST CASE 5: pop, top, push, and check if empty for Partially filled stack of integers, doubles, strings, chars...
-TEST CASE 6: pop, top, push, and check if empty for Fully filled stack of integers
-TEST CASE 7: pop, top, push, and check if empty for Fully filled stack of doubles
-TEST CASE 8: pop, top, push, and check if empty for Fully filled stack of strings
-TEST CASE 9: pop, top, push, and check if empty for Fully filled stack of integers, doubles, strings, chars...
-TEST CASE 10:input elements of various types
-TEST CASE 11:input one stack 1 as empty and stack 2 as not 
-TEST CASE 12:input one stack 2 as empty and stack 1 as not 
-*/
+using namespace::std;
 
 template <class T>
 class Stack
 {
-    public:
-    vect<T> stack;
-    /*
-    Requires: nothing
+private:
+	std::vector<T> stack;
 
-    Effects: returns true if empty, false if not
-    */
-    bool Stack::empty()
-    {
-        for(int i = 0; i < stack.size(); i++)
-            if(stack[i] != NULL)
-            {
-                return false;
-            }
-        return true;
-    }
-    /*
-    Requires: nothing
-    
-    Effects: add an element into the last index of the vector
-    */
-    void Stack::push(const T&item)
-    {
-        stack.push_back(item);
-    }
-    /*
-    Requires: nothing
-    
-    Effects: returns the last element of the stack (vector in this case), or prints invalid if empty
-    */
-    T &Stack::top()
-    {
-        if(stack.size() != 0)
-        {
-            for(int i = 0; i < stack.size(); i++)
-                if(i == stack.size()-1)
-                    return stack[i];
-        }
-        else return "Empty stack."
-    }
-    /*
-    Requires: nothing
-    
-    Effects: removes the last element of the stack (vector in this case), or prints invalid if empty
-    */
-    void Stack::pop()
-    {
-        if(stack.size() != 0)
-        {
-            for(int i = 0; i < stack.size(); i++)
-                if(i == stack.size()-1)
-                    stack.erase(stack[i]);
-        }
-        else return "Empty stack."
-    }
+public:
+	bool empty()
+	{
+		if (stack.empty())
+			return true;
+		else
+			return false;
+	}
+	void push(const T& item)
+	{
+		/*if (std::strcmp(typeid(item).name(), "bool"))
+		{
+			if (item == true)
+				stack.push_back(1);
+			else
+				stack.push_back(0);
+		}
+		else*/
+			stack.push_back(item);
+	}
+	T& top()
+	{
+		return stack.back();
+	}
+	void pop()
+	{
+		if(stack.size() > 0)
+			stack.pop_back();
+	}
+	template<class T>
+	friend Stack<T> operator + (Stack<T> &s1, Stack<T> &s2);
+	//friend ostream& operator<<(ostream&, const Stack<T>&);
 
-    friend Stack<T> operator+(Stack<T>&, Stack<T>&);
+	/*
+	template<class T>
+	Stack<T> operator+ (Stack<T>& const s1, Stack<T>& const s2)
+	{
+		Stack<T> s3;
+		s3.push(s1.pop() + s2.pop());
+		return s3;
+	}*/
 };
-
+	
+	template<class T>
+	Stack<T> operator + (Stack<T> &s1, Stack<T> &s2) 
+	{
+		Stack<T> s3;
+		Stack<T> t1;
+		Stack<T> t2;
+		Stack<T> t3;
+		/*
+		while (!s1.empty() || !s2.empty()) 
+		{
+			s3.push(s1.top() + s2.top());
+			t1.push(s1.top());
+			t2.push(s2.top());
+			s1.pop();
+			s2.pop();
+		}
+		*/
+		while (!s2.empty())
+		{
+			t3.push(s2.top());
+			t2.push(s2.top());
+			s2.pop();
+		}
+		while(!s1.empty())
+		{
+			t3.push(s1.top());
+			t1.push(s1.top());
+			s1.pop();
+		}
+		
+		while (!t3.empty()) 
+		{
+			s3.push(t3.top());
+			t3.pop();
+		}
+		
+		while (!t1.empty()) 
+		{
+			s1.push(t1.top());
+			t1.pop();
+		}
+		while (!t2.empty())
+		{
+			s2.push(t2.top());
+			t2.pop();
+		}
+		return s3;
+	}
 /*
-Requires: nothing
-
-Effects: returns a new stack containing the elements of the two given stacks as parameters SUCCESSIVELY (elements of stack 1 followed by those of stack 2)
-*/
-template <class T>
-Stack<T> operator+(Stack<T>& stack1, Stack<T>& stack2) // Call by reference
+int main()
 {
-    // Create an object to return
-    Stack<T> stack3;
- 
-    // Perform addition of feet and inches
-    for(int i = 0 ;i< stack1.size(); i++)
-        stack3[i] = stack1[i];
-    for(int i = stack1.size()-1 ;i< stack2.size(); i++)
-        stack3[i] = stack2[i];
- 
-    // Return the resulting object
-    return stack3;
-}
+	Stack<int> stack1;
+	stack1.push(10);
+	stack1.push(20);
+	stack1.push(30);
+
+	Stack<int> stack2;
+	stack2.push(40);
+	
+	Stack<char> stack3;
+	stack3.push('a');
+	stack3.push('`');
+	stack3.push('.');
+	Stack<char> stack33;
+	//stack33.push('3');
+	//stack33.push('f');
+	//stack33.push('-');
+	
+	Stack<string> stack4;
+	stack4.push("one");
+	stack4.push("two");
+	stack4.push("three");
+
+	Stack<string> stack44;
+	stack44.push("one");
+	stack44.push("two");
+	stack44.push("three");
+
+	
+	Stack<bool> stack5;
+	stack5.push(0);
+	stack5.push(1);
+
+	Stack<bool> stack55;
+	stack55.push(0);
+	stack55.push(1);
+	
+	/*
+	while (!stack2.empty())
+	{
+		std::cout << stack2.top() << std::endl;
+		stack2.pop();
+	}
+	std::cout << std::endl;
+	while (!stack1.empty())
+	{
+		std::cout << stack1.top() << std::endl;
+		stack1.pop();
+	}
+	std::cout << std::endl;
+	
+	//Stack<bool> stack6 = stack5 + stack55;
+	Stack<bool> stack7 = stack5 + stack55;
+
+	/*
+	while (!stack6.empty())
+	{
+		std::cout << stack6.top() << std::endl;
+		stack6.pop();
+	}
+	std:: cout << std::endl;
+	while (!stack2.empty())
+	{
+		std::cout << stack2.top() << std::endl;
+		stack2.pop();
+	}
+	std::cout << std::endl;
+	while (!stack1.empty())
+	{
+		std::cout << stack1.top() << std::endl;
+		stack1.pop();
+	}
+	*/
+	/*
+	while (!stack7.empty())
+	{
+		std::cout << stack7.top() << std::endl;
+		stack7.pop();
+	}
+	std::cout << std::endl;
+	while (!stack2.empty())
+	{
+		std::cout << stack2.top() << std::endl;
+		stack2.pop();
+	}
+	std::cout << std::endl;
+	while (!stack1.empty())
+	{
+		std::cout << stack1.top() << std::endl;
+		stack1.pop();
+	}
+
+	return 0;*/
+//}
+/*
+template <class T>
+Stack<T> operator+(Stack<T>& s1, Stack<T>& s2)
+{
+	return Stack<T>();
+}*/
