@@ -1,4 +1,7 @@
-//NOTE: ON LINE 77, ON VS CODE IT GIVES AN ERROR IF WE PUT THE TEMPLATE AGAIN(shadow error), HOWEVER, IT WORKS FINE ON VS. I COMMENTED IT ON VS CODE JUST IN CASE
+
+
+
+//NOTE: ON LINE 82, ON VS CODE IT GIVES AN ERROR IF WE PUT THE TEMPLATE AGAIN(shadow error), HOWEVER, IT WORKS FINE ON THE REGULAR VISUAL STUDIO. I COMMENTED IT ON VS CODE JUST IN CASE
 
 #include <iostream>
 #include <vector>
@@ -8,20 +11,20 @@
 /*
 TEST CASES
 
-TEST CASE 1: Empty stack	=> checked (no errors if valid type)
-TEST CASE 2: pop, top, push, and check if empty for a filled stack of integers	=> checked (no errors if valid)
-TEST CASE 3: pop, top, push, and check if empty for a filled stack of doubles	=> checked (no errors if valid)
-TEST CASE 4: pop, top, push, and check if empty for a filled stack of strings	=> checked (no errors if valid)
-TEST CASE 5: pop, top, push, and check if empty for a filled stack of chars		=> checked (no errors if valid)
-TEST CASE 6: pop, top, push, and check if empty for a stack of bools => TEST FAILS
-TEST CASE 7: add two int/double stacks of same size			=> checked (no errors if valid)
-TEST CASE 8: add two int/double stacks of different size	=> checked (no errors if valid)
-TEST CASE 9: add two string stacks of same 	size			=> checked (no errors if valid)
-TEST CASE 10: add two string stacks of different size		=> checked (no errors if valid)
-TEST CASE 11: add two char stacks of same size				=> checked (no errors if valid)
-TEST CASE 12: add two char stacks of different size			=> checked (no errors if valid)
-TEST CASE 13: add two bool stacks of same size => TEST FAILS
-TEST CASE 14: add two bool stacks of different size => TEST FAILS
+TEST CASE 1: Empty stack	=> checked (no errors if valid type) : Stack<int>, Stack<char>, etc.
+TEST CASE 2: pop, top, push, and check if empty for a filled stack of integers	=> checked (no errors if valid): Stack<int> pushing to it 4,2,1,2,3
+TEST CASE 3: pop, top, push, and check if empty for a filled stack of doubles	=> checked (no errors if valid): Stack<double> pushing to it 4.2,2,1,2.5,3.8
+TEST CASE 4: pop, top, push, and check if empty for a filled stack of strings	=> checked (no errors if valid): Stack<string> pushing to it "string1", "two"
+TEST CASE 5: pop, top, push, and check if empty for a filled stack of chars		=> checked (no errors if valid): Stack<char> pushing to it 'c', 'b'
+TEST CASE 6: pop, top, push, and check if empty for a stack of bools => TEST FAILS BY CPP CONVENTION
+TEST CASE 7: add two int/double stacks of same size			=> checked (no errors if valid): c = a + b  where a == b
+TEST CASE 8: add two int/double stacks of different size	=> checked (no errors if valid): c = a + b  where a != b
+TEST CASE 9: add two string stacks of same 	size			=> checked (no errors if valid): c = a + b  where a == b
+TEST CASE 10: add two string stacks of different size		=> checked (no errors if valid): c = a + b  where a != b
+TEST CASE 11: add two char stacks of same size				=> checked (no errors if valid): c = a + b  where a == b
+TEST CASE 12: add two char stacks of different size			=> checked (no errors if valid): c = a + b  where a != b
+TEST CASE 13: add two bool stacks of same size => TEST FAILS BY CPP CONVENTION
+TEST CASE 14: add two bool stacks of different size => TEST FAILS BY CPP CONVENTION
 */
 
 using namespace::std;
@@ -48,7 +51,7 @@ public:
 	/*
 	Requires: nothing
 
-	Effects: add an element into the last index of the vector
+	Effects: add an element/item input into the last index of the vector
 	*/
 	void push(const T& item)
 	{
@@ -57,7 +60,7 @@ public:
 	/*
 	Requires: nothing
 
-	Effects: returns the last element of the stack (vector in this case), or prints invalid if empty
+	Effects: returns the last element of the stack (vector in this case)
 	*/
 	T& top()
 	{
@@ -73,8 +76,10 @@ public:
 		
 		if(stack.size() > 0)
 			stack.pop_back();
+		else 
+			std::cout << "Invalid stack size";
 	}
-	//template<class T>													UNCOMMENT IF NECESSARY, WORKS WITHOUT IT ON VS CODE AND WORKS WITH OR WITHOUT IT ON VS
+	//template<class T>
 	friend Stack<T> operator + (Stack<T>& s1, Stack<T>& s2);
 };
 	/*
@@ -85,11 +90,13 @@ public:
 	template<class T>
 	Stack<T> operator + (Stack<T> &s1, Stack<T> &s2) 
 	{
+		//if (!(std::strcmp(typeid(s1).name(), "class Stack<bool>")) || !(std::strcmp(typeid(s2).name(), "class Stack<bool>")))
+		//{
 			Stack<T> s3;
 			Stack<T> t1;
 			Stack<T> t2;
 			Stack<T> t3;
-			/*
+			/*//in case you wanted the implementation to add the values together at the same indices
 			while (!s1.empty() || !s2.empty())
 			{
 				s3.push(s1.top() + s2.top());
@@ -129,9 +136,9 @@ public:
 				t2.pop();
 			}
 			return s3;
-		
+		//}
 	}
-
+	
 int main()
 {
 	Stack<int> stack1;
@@ -147,9 +154,9 @@ int main()
 	stack3.push('`');
 	stack3.push('.');
 	Stack<char> stack33;
-	//stack33.push('3');
-	//stack33.push('f');
-	//stack33.push('-');
+	stack33.push('3');
+	stack33.push('f');
+	stack33.push('-');
 	
 	Stack<string> stack4;
 	stack4.push("one");
@@ -174,29 +181,16 @@ int main()
 
 	
 	
-	
-	while (!stack2.empty())
-	{
-		std::cout << stack2.top() << std::endl;
-		stack2.pop();
-	}
-	std::cout << std::endl;
-	while (!stack1.empty())
-	{
-		std::cout << stack1.top() << std::endl;
-		stack1.pop();
-	}
-	std::cout << std::endl;
-	
-	//Stack<string> stack6 = stack4 + stack44;		ERROR BY CPP CONVENTION, I PUT A REQUIREMENT IN THE SPECS
-	//Stack<bool> stack7 = stack5 + stack55; 		ERROR BY CPP CONVENTION, I PUT A REQUIREMENT IN THE SPECS
-
 	/*
+	Stack<string> stack6 = stack4 + stack44;
+	
 	while (!stack6.empty())
 	{
 		std::cout << stack6.top() << std::endl;
 		stack6.pop();
 	}
+	*/
+	/*
 	std:: cout << std::endl;
 	while (!stack2.empty())
 	{
@@ -210,27 +204,8 @@ int main()
 		stack1.pop();
 	}
 	*/
-	/*
-	while (!stack7.empty())
-	{
-		std::cout << stack7.top() << std::endl;
-		stack7.pop();
-	}
-	std::cout << std::endl;
-	*/
-	/*
-	while (!stack2.empty())
-	{
-		std::cout << stack2.top() << std::endl;
-		stack2.pop();
-	}
-	std::cout << std::endl;
-	while (!stack1.empty())
-	{
-		std::cout << stack1.top() << std::endl;
-		stack1.pop();
-	}*/
 
-	//return 0;
+	return 0;
 }
+
 

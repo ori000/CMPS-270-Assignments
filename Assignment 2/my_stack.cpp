@@ -6,12 +6,12 @@
 /*
 TEST CASES
 
-TEST CASE 1: Empty stack	=> checked (no errors if valid type)
-TEST CASE 2: pop, top, push, and check if empty for a filled stack of integers	=> checked (no errors if valid)
-TEST CASE 3: pop, top, push, and check if empty for a filled stack of doubles	=> checked (no errors if valid)
-TEST CASE 4: pop, top, push, and check if empty for a filled stack of strings	=> checked (no errors if valid)
-TEST CASE 5: pop, top, push, and check if empty for a filled stack of chars		=> checked (no errors if valid)
-TEST CASE 6: pop, top, push, and check if empty for a stack of bools => TEST FAILS
+TEST CASE 1: Empty stack	=> checked (no errors if valid type) : Stack<int>, Stack<char>, etc.
+TEST CASE 2: pop, top, push, and check if empty for a filled stack of integers	=> checked (no errors if valid): Stack<int> pushing to it 4,2,1,2,3
+TEST CASE 3: pop, top, push, and check if empty for a filled stack of doubles	=> checked (no errors if valid): Stack<double> pushing to it 4.2,2,1,2.5,3.8
+TEST CASE 4: pop, top, push, and check if empty for a filled stack of strings	=> checked (no errors if valid): Stack<string> pushing to it "string1", "two"
+TEST CASE 5: pop, top, push, and check if empty for a filled stack of chars		=> checked (no errors if valid): Stack<char> pushing to it 'c', 'b'
+TEST CASE 6: pop, top, push, and check if empty for a stack of bools => TEST FAILS BY CPP CONVENTION
 */
 
 using namespace::std;
@@ -36,7 +36,7 @@ public:
 			return false;
 	}
 	/*
-	Requires: nothing
+	Requires: input item not to be of type bool
 
 	Effects: add an element into the last index of the vector
 	*/
@@ -47,7 +47,7 @@ public:
 	/*
 	Requires: nothing
 
-	Effects: returns the last element of the stack (vector in this case), or prints invalid if empty
+	Effects: returns the last element of the stack (vector in this case)
 	*/
 	T& top()
 	{
@@ -60,7 +60,11 @@ public:
 	*/
 	void pop()
 	{
+
+		if (stack.size() > 0)
 			stack.pop_back();
+		else 
+			std::cout << "Invalid stack size";
 	}
 	//template<class T>
 	//friend Stack<T> operator + (Stack<T>& s1, Stack<T>& s2);
@@ -130,9 +134,9 @@ int main()
 	stack3.push('`');
 	stack3.push('.');
 	Stack<char> stack33;
-	//stack33.push('3');
-	//stack33.push('f');
-	//stack33.push('-');
+	stack33.push('3');
+	stack33.push('f');
+	stack33.push('-');
 
 	Stack<string> stack4;
 	stack4.push("one");
@@ -143,21 +147,7 @@ int main()
 	stack44.push("one");
 	stack44.push("two");
 	stack44.push("three");
-
-
-	Stack<bool> stack5;
-	stack5.push(0);
-	stack5.push(1);
-
-	Stack<bool> stack55;
-	stack55.push(0);
-	stack55.push(1);
-
-
-
-
-
-	/*
+	
 	while (!stack2.empty())
 	{
 		std::cout << stack2.top() << std::endl;
@@ -170,49 +160,17 @@ int main()
 		stack1.pop();
 	}
 	std::cout << std::endl;
-	*/
-	//Stack<string> stack6 = stack4 + stack44;
-	//Stack<bool> stack7 = stack5 + stack55;
-
+	
 	/*
+	Stack<string> stack6 = stack4 + stack44;
+
 	while (!stack6.empty())
 	{
 		std::cout << stack6.top() << std::endl;
 		stack6.pop();
 	}
-	std:: cout << std::endl;
-	while (!stack2.empty())
-	{
-		std::cout << stack2.top() << std::endl;
-		stack2.pop();
-	}
-	std::cout << std::endl;
-	while (!stack1.empty())
-	{
-		std::cout << stack1.top() << std::endl;
-		stack1.pop();
-	}
 	*/
-	/*
-	while (!stack7.empty())
-	{
-		std::cout << stack7.top() << std::endl;
-		stack7.pop();
-	}
-	std::cout << std::endl;
-	*/
-	/*
-	while (!stack2.empty())
-	{
-		std::cout << stack2.top() << std::endl;
-		stack2.pop();
-	}
-	std::cout << std::endl;
-	while (!stack1.empty())
-	{
-		std::cout << stack1.top() << std::endl;
-		stack1.pop();
-	}*/
 
-	//return 0;
+	return 0;
 }
+

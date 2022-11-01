@@ -1,20 +1,24 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <algorithm>
+#include <string>
 using namespace std;
 
 /*
 TEST CASES
 
 TEST CASE 1: Empty graph	=> checked (print invalid)
-TEST CASE 2: int graph with adjacent nodes	=> checked (no errors if valid)
-TEST CASE 3: int graph with zero adjacent nodes	=> checked (no errors if valid)
-TEST CASE 4: graph with no cycles	=> checked (no errors if valid)
-TEST CASE 5: graph with mutliple cycles	=> checked (no errors if valid)
-TEST CASE 6: graph with cycles towards every vertex	=> checked (no errors if valid)
-TEST CASE 7: graph with grand-children (adjacent nodes have adjacent nodes)	=> checked (no errors if valid)
-TEST CASE 8: graph with no grand-children	=> checked (no errors if valid)
-TEST CASE 9: graph with with only one node having one adjacent node having one child... 	=> checked (no errors if valid)
+TEST CASE 2: int graph with adjacent nodes	=> checked (no errors if valid type): start = 0001 end = 2345
+TEST CASE 3: int graph with zero adjacent nodes	=> checked (no errors if valid type): start = 0001 end = null
+TEST CASE 4: graph with no cycles	=> checked (no errors if valid type): start = 00 end = 12
+TEST CASE 5: graph with mutliple cycles	=> checked (no errors if valid type): start = 0012 end = 1200
+TEST CASE 6: graph with cycles towards every vertex	=> checked (no errors if valid type): start = 01 end =10
+TEST CASE 7: graph with grand-children (adjacent nodes have adjacent nodes)	=> checked (no errors if valid): start = 012 end = 12
+TEST CASE 8: graph with no grand-children	=> checked (no errors if valid): start = 0 end = null
+TEST CASE 9: graph with with only one node having one adjacent node having one child... 	=> checked (no errors if valid): start = 012 end = 12
+TEST CASE 10:graph with already defined adjacent nodes => checked (if statement) ignore if already defined
+TEST CASE 11:graph with new undefined adjacent nodes => checked (if statement) add nodes if undefined
 */
 
 class Graph
@@ -24,25 +28,33 @@ private:
 	vector<int> end;
 public:
 	map<int, vector<int>> g;
+	/*
+	REQUIRES: nothing
+
+	EFFECTS: assigns the start and end vectors to those in given input parameters
+	*/
 	Graph(const vector<int>& starts, const vector<int>& ends)
 	{
 		start = starts;
 		end = ends;
 	}
 	/*
-	REQUIRES: nothing
+	REQUIRES: nodeID input of type int
 
 	EFFECTS: returns the number of outgoing edges / direct vertices from the given node input 
 	*/
 	int numOutgoing(const int nodeID)
 	{
 		vector<int> outgoing;
-		if (end.size() <= start.size() && start.size() != 0)
+		if (end.size() <= start.size() && start.size() != 0 && std::find(start.begin(), start.end(), nodeID) != start.end())
 		{
 			for (int i = 0; i < end.size(); i++)
 			{
-				if (start[i] == nodeID)
+				if (start[i] == nodeID && std::find(g[nodeID].begin(), g[nodeID].end(), end[i]) == g[nodeID].end())
+				{
 					outgoing.push_back(end[i]);
+					g[nodeID].push_back(end[i]);
+				}
 			}
 			/*
 			for (int i = 0; i < start.size(); i++)
@@ -50,9 +62,9 @@ public:
 				if (start[i] == nodeID)
 					g.insert(nodeID, end[i]);
 
-			}*/
-			g[nodeID] = outgoing;
-			return outgoing.size();
+			}
+			*/
+			return g[nodeID].size();
 		}
 		else 
 		{
@@ -61,39 +73,57 @@ public:
 		}
 	}
 	/*
-	REQUIRES: nothing
+	REQUIRES: input nodeID of type int
 
-	EFFECTS: returns a vector containing the adjacent nodes of the given node input
+	EFFECTS: returns a vector containing the adjacent nodes of the given node input (returned vector is the value of map g at key nodeID)
 	*/
 	const vector<int> adjacent(const int nodeID)
 	{
 		vector<int> outgoing;
-		if (end.size() <= start.size() && start.size() != 0)
+		if (end.size() <= start.size() && start.size() != 0 && std::find(start.begin(), start.end(), nodeID) != start.end())
 		{
 			for (int i = 0; i < end.size(); i++)
 			{
-				if (start[i] == nodeID)
+				if (start[i] == nodeID && std::find(g[nodeID].begin(), g[nodeID].end(), end[i]) == g[nodeID].end())
 				{
 					outgoing.push_back(end[i]);
+					g[nodeID].push_back(end[i]);
 				}
 			}
-			return outgoing;
+			return g[nodeID];
 		}
 		else 
 		{
 			std::cout << "INVALID START & END VECTORS";
-			return outgoing;
+			return g[nodeID];
 		}
 	}
 	/*
 	REQUIRES: non-empty int graph
 
-	EFFECTS: return true if graph contains at least one cycle, false if not
+	EFFECTS: return cycle in graph(if exists), return no cycles if there isnt any
 	*/
-	bool hasCycles(Graph graph) 
+	string hasCycles(Graph graph) 
 	{
 		vector<int> s = graph.start;
 		vector<int> e = graph.end;
+		// if (end.size() <= start.size() && start.size() != 0)
+		// {
+		// 	for (int i = 0; i < s.size(); i++)
+		// 	{
+		// 		for (int j = 0; j < e.size(); j++)
+		// 		{
+		// 			if (start[j] == end[i] && e[j] == s[i])
+		// 				return true;
+		// 		}
+		// 	}
+		// 	return false;
+		// }
+		// else 
+		// {
+		// 	std::cout << "INVALID START / END VECTOR SIZE";
+		// 	return false;
+		// }
 		if (end.size() <= start.size() && start.size() != 0)
 		{
 			for (int i = 0; i < s.size(); i++)
@@ -101,15 +131,22 @@ public:
 				for (int j = 0; j < e.size(); j++)
 				{
 					if (start[j] == end[i] && e[j] == s[i])
-						return true;
+					{;
+						string cycle = "Cycle: ";
+						cycle += std::to_string(start[j]);
+						cycle += ",";
+						cycle += std::to_string(end[j]);
+						return cycle;
+					}
+						
 				}
 			}
-			return false;
+			return "No Cycles";
 		}
 		else 
 		{
 			std::cout << "INVALID START / END VECTOR SIZE";
-			return false;
+			return "";
 		}
 	}
 };
@@ -160,10 +197,10 @@ int main()
 	Graph graph4(d,dd);
 	Graph graph5(b,bb);
 
-
-	std::cout << graph.hasCycles(graph) << std::endl;
-	std::cout << graph.numOutgoing(2) << std::endl;
-
+	
+	std::cout << graph.hasCycles(graph);
+	std::cout << graph.numOutgoing(4) << std::endl;
+	
 	const vector<int> v = (graph.adjacent(0));
 	const vector<int> v2 = (graph.adjacent(4));
 
@@ -171,9 +208,9 @@ int main()
 		std::cout << v[i] << std::endl;
 	for (int i = 0; i < v2.size(); i++)
 		std::cout << v2[i] << std::endl;
-
-	std::cout << std::endl;
-
+	
+	
+	/*
 	std::cout << graph2.hasCycles(graph2) << std::endl;
 	std::cout << graph2.numOutgoing(0) << std::endl;
 
@@ -223,7 +260,7 @@ int main()
 		std::cout << v9[i] << std::endl;
 	for (int i = 0; i < v10.size(); i++)
 		std::cout << v10[i] << std::endl;
-
+		*/
 	return 0;
 }
 
