@@ -2,7 +2,6 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <string>
 using namespace std;
 
 /*
@@ -11,15 +10,11 @@ TEST CASES
 TEST CASE 1: Empty graph	=> checked (print invalid)
 TEST CASE 2: int graph with adjacent nodes	=> checked (no errors if valid type): start = 0001 end = 2345
 TEST CASE 3: int graph with zero adjacent nodes	=> checked (no errors if valid type): start = 0001 end = null
-TEST CASE 4: graph with no cycles	=> checked (no errors if valid type): start = 00 end = 12
-TEST CASE 5: graph with mutliple cycles	=> checked (no errors if valid type): start = 0012 end = 1200
-TEST CASE 6: graph with cycles towards every vertex	=> checked (no errors if valid type): start = 01 end =10
-TEST CASE 7: graph with grand-children (adjacent nodes have adjacent nodes)	=> checked (no errors if valid): start = 012 end = 12
-TEST CASE 8: graph with no grand-children	=> checked (no errors if valid): start = 0 end = null
-TEST CASE 9: graph with with only one node having one adjacent node having one child... 	=> checked (no errors if valid): start = 012 end = 12
-TEST CASE 10:graph with already defined adjacent nodes => checked (if statement) ignore if already defined
-TEST CASE 11:graph with new undefined adjacent nodes => checked (if statement) add nodes if undefined
+TEST CASE 4: graph with grand-children (adjacent nodes have adjacent nodes)	=> checked (no errors if valid): start = 012 end = 12
+TEST CASE 5:graph with already defined adjacent nodes => checked (if statement) ignore if already defined
+TEST CASE 6:graph with new undefined adjacent nodes => checked (if statement) add nodes if undefined
 */
+
 
 class Graph
 {
@@ -39,9 +34,9 @@ public:
 		end = ends;
 	}
 	/*
-	REQUIRES: nodeID input of type int
+	REQUIRES: input nodeID of type int
 
-	EFFECTS: returns the number of outgoing edges / direct vertices from the given node input 
+	EFFECTS: returns the number of outgoing edges / direct vertices from the given node input
 	*/
 	int numOutgoing(const int nodeID)
 	{
@@ -62,11 +57,10 @@ public:
 				if (start[i] == nodeID)
 					g.insert(nodeID, end[i]);
 
-			}
-			*/
+			}*/
 			return g[nodeID].size();
 		}
-		else 
+		else
 		{
 			std::cout << "INVALID START / END VECTORS";
 			return 0;
@@ -75,7 +69,7 @@ public:
 	/*
 	REQUIRES: input nodeID of type int
 
-	EFFECTS: returns a vector containing the adjacent nodes of the given node input (returned vector is the value of map g at key nodeID)
+	EFFECTS: returns a vector containing the adjacent nodes of the given node input
 	*/
 	const vector<int> adjacent(const int nodeID)
 	{
@@ -92,7 +86,7 @@ public:
 			}
 			return g[nodeID];
 		}
-		else 
+		else
 		{
 			std::cout << "INVALID START & END VECTORS";
 			return g[nodeID];
@@ -101,29 +95,13 @@ public:
 	/*
 	REQUIRES: non-empty int graph
 
-	EFFECTS: return cycle in graph(if exists), return no cycles if there isnt any
+	EFFECTS: return true if graph contains at least one cycle, false if not
 	*/
-	string hasCycles(Graph graph) 
+	/*
+	bool hasCycles(Graph graph)
 	{
 		vector<int> s = graph.start;
 		vector<int> e = graph.end;
-		// if (end.size() <= start.size() && start.size() != 0)
-		// {
-		// 	for (int i = 0; i < s.size(); i++)
-		// 	{
-		// 		for (int j = 0; j < e.size(); j++)
-		// 		{
-		// 			if (start[j] == end[i] && e[j] == s[i])
-		// 				return true;
-		// 		}
-		// 	}
-		// 	return false;
-		// }
-		// else 
-		// {
-		// 	std::cout << "INVALID START / END VECTOR SIZE";
-		// 	return false;
-		// }
 		if (end.size() <= start.size() && start.size() != 0)
 		{
 			for (int i = 0; i < s.size(); i++)
@@ -131,24 +109,18 @@ public:
 				for (int j = 0; j < e.size(); j++)
 				{
 					if (start[j] == end[i] && e[j] == s[i])
-					{;
-						string cycle = "Cycle: ";
-						cycle += std::to_string(start[j]);
-						cycle += ",";
-						cycle += std::to_string(end[j]);
-						return cycle;
-					}
-						
+						return true;
 				}
 			}
-			return "No Cycles";
+			return false;
 		}
-		else 
+		else
 		{
 			std::cout << "INVALID START / END VECTOR SIZE";
-			return "";
+			return false;
 		}
 	}
+	*/
 };
 
 int main()
@@ -192,15 +164,33 @@ int main()
 
 
 	Graph graph(s, e);
-	Graph graph2(f,ff);
-	Graph graph3(c,cc);
-	Graph graph4(d,dd);
-	Graph graph5(b,bb);
+	Graph graph2(f, ff);
+	Graph graph3(c, cc);
+	Graph graph4(d, dd);
+	Graph graph5(b, bb);
 
-	
-	std::cout << graph.hasCycles(graph) << std::endl;
+
+	/*
+	std::cout << graph.numOutgoing(2) << std::endl;
+
 	std::cout << graph.numOutgoing(4) << std::endl;
+	vector<int> v = graph.adjacent(4);
+	vector<int> v2 = graph.adjacent(0);
+	vector<int> v3 = graph.adjacent(2);
 	
+	cout << endl;
+	cout << graph.g.size();
+	cout << endl;
+	for (int i = 0; i < v.size(); i++)
+		cout << v[i];
+	cout << endl;
+	for (int i = 0; i < v2.size(); i++)
+		cout << v2[i];
+	cout << endl;
+	for (int i = 0; i < v3.size(); i++)
+		cout << v3[i];
+		*/
+	/*
 	const vector<int> v = (graph.adjacent(0));
 	const vector<int> v2 = (graph.adjacent(4));
 
@@ -208,10 +198,9 @@ int main()
 		std::cout << v[i] << std::endl;
 	for (int i = 0; i < v2.size(); i++)
 		std::cout << v2[i] << std::endl;
-	
-	
-	/*
-	std::cout << graph2.hasCycles(graph2) << std::endl;
+
+	std::cout << std::endl;
+
 	std::cout << graph2.numOutgoing(0) << std::endl;
 
 	const vector<int> v3 = (graph2.adjacent(0));
@@ -224,7 +213,6 @@ int main()
 
 	std::cout << std::endl;
 
-	std::cout << graph3.hasCycles(graph3) << std::endl;
 	std::cout << graph3.numOutgoing(0) << std::endl;
 
 	const vector<int> v5 = (graph3.adjacent(0));
@@ -237,7 +225,6 @@ int main()
 
 	std::cout << std::endl;
 
-	std::cout << graph4.hasCycles(graph4) << std::endl;
 	std::cout << graph4.numOutgoing(6) << std::endl;
 
 	const vector<int> v7 = (graph4.adjacent(6));
@@ -250,7 +237,6 @@ int main()
 
 	std::cout << std::endl;
 
-	std::cout << graph5.hasCycles(graph5) << std::endl;
 	std::cout << graph5.numOutgoing(2) << std::endl;
 
 	const vector<int> v9 = (graph5.adjacent(0));
@@ -260,7 +246,6 @@ int main()
 		std::cout << v9[i] << std::endl;
 	for (int i = 0; i < v10.size(); i++)
 		std::cout << v10[i] << std::endl;
-		*/
+	*/
 	return 0;
 }
-

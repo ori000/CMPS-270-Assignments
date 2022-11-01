@@ -6,7 +6,7 @@
 /*
 TEST CASES
 
-TEST CASE 1: Empty Tree with no root node	=> checked: add root
+TEST CASE 1: Empty Tree with no root node	=> checked: add root: treeNode<int>
 TEST CASE 2: Tree with only the root node	=> checked: add to left
 TEST CASE 3: Tree with a root and two direct children (left & right)	=> checked: add arbitrarily
 TEST CASE 4: Tree with only left children	=> checked (Impossible due to requested method description)
@@ -17,7 +17,7 @@ TEST CASE 8: Tree with all nodes having two children					=> checked (Impossible 
 TEST CASE 9: Tree with all nodes having two children except for a left node with one child	=> checked: add leaf node
 TEST CASE 10:Tree with all nodes having two children except for a right node with one child	=> checked: add leaf node
 TEST CASE 11:Tree with only one branch children (left, right, left, right, etc.)			=> checked: (Impossible due to requested method description)
-TEST CASE 12:Tree with all nodes having two children except for a right node with one child and a left node with one child (in another subtree)	=> checked: add node
+TEST CASE 12:Tree with all nodes having two children except for a right node with one child and a left node with one child (in another subtree)	=> checked: add leaf node
 
 */
 
