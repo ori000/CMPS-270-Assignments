@@ -3,6 +3,7 @@
 #include <map>
 #include <algorithm>
 #include <string>
+#include <stack>
 using namespace std;
 
 /*
@@ -46,7 +47,7 @@ public:
 	int numOutgoing(const int nodeID)
 	{
 		vector<int> outgoing;
-		if (end.size() <= start.size() && start.size() != 0 && std::find(start.begin(), start.end(), nodeID) != start.end())
+		if (end.size() == start.size() && start.size() != 0 && std::find(start.begin(), start.end(), nodeID) != start.end())
 		{
 			for (int i = 0; i < end.size(); i++)
 			{
@@ -80,7 +81,7 @@ public:
 	const vector<int> adjacent(const int nodeID)
 	{
 		vector<int> outgoing;
-		if (end.size() <= start.size() && start.size() != 0 && std::find(start.begin(), start.end(), nodeID) != start.end())
+		if (end.size() == start.size() && start.size() != 0 && std::find(start.begin(), start.end(), nodeID) != start.end())
 		{
 			for (int i = 0; i < end.size(); i++)
 			{
@@ -124,24 +125,24 @@ public:
 		// 	std::cout << "INVALID START / END VECTOR SIZE";
 		// 	return false;
 		// }
-		if (end.size() <= start.size() && start.size() != 0)
+		if (end.size() == start.size() && start.size() != 0)
 		{
+			string cycle = "Cycle: ";
+			stack<string> stack;
 			for (int i = 0; i < s.size(); i++)
 			{
 				for (int j = 0; j < e.size(); j++)
 				{
 					if (start[j] == end[i] && e[j] == s[i])
-					{;
-						string cycle = "Cycle: ";
+					{
 						cycle += std::to_string(start[j]);
 						cycle += ",";
 						cycle += std::to_string(end[j]);
-						return cycle;
 					}
 						
 				}
 			}
-			return "No Cycles";
+			return cycle;
 		}
 		else 
 		{
