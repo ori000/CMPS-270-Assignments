@@ -6,19 +6,84 @@
 #include <stdlib.h>
 #include <time.h>
 
+/*
+TEST CASES:
+
+TEST CASE 1: Array of size 100 and 1 Thread => checked
+TEST CASE 2: Array of size 10,000 and 1 Thread => checked
+TEST CASE 3: Array of size 100,000 and 1 Thread => checked
+TEST CASE 4: Array of size 1000,000 and 1 Thread => checked
+TEST CASE 5: Array of size 10,000,000 and 1 Thread => checked
+TEST CASE 6: Array of size 1,000,000,000 and 1 Thread => checked
+
+TEST CASE 7: Array of size 100 and 2 Threads => checked
+TEST CASE 8: Array of size 10,000 and 2 Threads => checked
+TEST CASE 9: Array of size 100,000 and 2 Threads => checked
+TEST CASE 10: Array of size 1000,000 and 2 Threads => checked
+TEST CASE 11: Array of size 10,000,000 and 2 Threads => checked
+TEST CASE 12: Array of size 1,000,000,000 and 2 Threads => checked
+
+TEST CASE 13: Array of size 100 and 4 Threads => checked
+TEST CASE 14: Array of size 10,000 and 4 Threads => checked
+TEST CASE 15: Array of size 100,000 and 4 Threads => checked
+TEST CASE 16: Array of size 1000,000 and 4 Threads => checked
+TEST CASE 17: Array of size 10,000,000 and 4 Threads => checked
+TEST CASE 18: Array of size 1,000,000,000 and 4 Threads => checked
+
+TEST CASE 19: Array of size 100 and 8 Threads => checked
+TEST CASE 20: Array of size 10,000 and 8 Threads => checked
+TEST CASE 21: Array of size 100,000 and 8 Threads => checked
+TEST CASE 22: Array of size 1000,000 and 8 Threads => checked
+TEST CASE 23: Array of size 10,000,000 and 8 Threads => checked
+TEST CASE 24: Array of size 1,000,000,000 and 8 Threads => checked
+
+TEST CASE 25: Array of size 100 and 16 Threads => checked
+TEST CASE 26: Array of size 10,000 and 16 Threads => checked
+TEST CASE 27: Array of size 100,000 and 16 Threads => checked
+TEST CASE 28: Array of size 1000,000 and 16 Threads => checked
+TEST CASE 29: Array of size 10,000,000 and 16 Threads => checked
+TEST CASE 30: Array of size 1,000,000,000 and 16 Threads => checked
+
+TEST CASE 31: Array of size 100 and 32 Threads => checked
+TEST CASE 32: Array of size 10,000 and 32 Threads => checked
+TEST CASE 33: Array of size 100,000 and 32 Threads => checked
+TEST CASE 34: Array of size 1000,000 and 32 Threads => checked
+TEST CASE 35: Array of size 10,000,000 and 32 Threads => checked
+TEST CASE 36: Array of size 1,000,000,000 and 32 Threads => checked
+
+TEST CASE 37: Array of size 100 and 64 Threads => checked
+TEST CASE 38: Array of size 10,000 and 64 Threads => checked
+TEST CASE 39: Array of size 100,000 and 64 Threads => checked
+TEST CASE 40: Array of size 1000,000 and 64 Threads => checked
+TEST CASE 41: Array of size 10,000,000 and 64 Threads => checked
+TEST CASE 42: Array of size 1,000,000,000 and 64 Threads => checked
+
+TEST CASE 43: Array of size 100,000,000 and 1 Threads => checked
+TEST CASE 44: Array of size 100,000,000 and 2 Threads => checked
+TEST CASE 45: Array of size 100,000,000 and 4 Threads => checked
+TEST CASE 46: Array of size 100,000,000 and 8 Threads => checked
+TEST CASE 47: Array of size 100,000,000 and 16 Threads => checked
+TEST CASE 48: Array of size 100,000,000 and 32 Threads => checked
+TEST CASE 49: Array of size 100,000,000 and 64 Threads => checked
+
+TEST CASE 50: Array of size 0 and 0 Threads => checked
+TEST CASE 51: Array of size > 0 and 0 Threads => checked
+TEST CASE 52: Out of bounds exception => checked
+*/
+
 //L1 CACHE SIZE: 384 KB
 struct Cache
 {
-    int counter;
+    long counter;
     char* array;
 };
 
-#define numberofThreads 16
-#define length 100000
+#define numberofThreads 64
+#define length 1000000
 void* cacheFunc (void* threadID);
 
-long iter = 0, countCache = 0; 
-int count = 0;
+long iter = 0, countAccurate = 0, countCache = 0; 
+long count = 0;
 long* array;
 
 /*
@@ -28,25 +93,51 @@ EFFECTS: check for the number of ones in the array and keep track of the number 
 */
 void* cacheFunc (void* threadID)
 {
-    #pragma omp parallel
+    // #pragma omp parallel
     {
         struct Cache cache;
-        cache.array = (char*)malloc(384*1000);
-        long id= (long) threadID;
+        cache.counter = 0;
+        cache.array = (char*)malloc(384*1000); //create an array of size 387 KB (size of my L1 Cache)
+        long id= (long) threadID; //id is to determine the starting position for each thread (because we split the array where each thread takes a part)
         long avgThreadsIter = length/numberofThreads; //in order to iterate over the splitted parts of the array (e.g., 100/2 => 50 , 50 for each thread)
-        #pragma omp for private(i)
-        for(long i = id*avgThreadsIter; i < id*avgThreadsIter+avgThreadsIter; i++)  //in order to iterate over the splitted parts of the array (e.g., from 0 to 49, from 50 to 100)
+        // #pragma omp for private(i)
+        if(id < numberofThreads - 1) // usual case where we should not have problems splitting the array between threads
         {
-            if(array[i] == 1)
-            {   
-                #pragma omp critical
-                cache.counter+=1;
+            for(long i = id*avgThreadsIter; i < id*avgThreadsIter+avgThreadsIter; i++)  //in order to iterate over the splitted parts of the array (e.g., from 0 to 49, from 50 to 100)
+            {
+                if(array[i] == 1)
+                {   
+                    // #pragma omp critical
+                    cache.counter+=1;
+                    if(i <= 284*1000)
+                        cache.array[i] = cache.counter;
+                }
+                // #pragma omp critical
+                iter +=1;
             }
-            #pragma omp critical
-            iter +=1;
         }
-        countCache = cache.counter;
-        cache.array = ""+cache.counter;
+        else if(id >= numberofThreads - 1) //to avoid inaccurate counting when we reach the number of threads (e.g., length: 100, threads: 64, without this logic we would have i in the previous for loop greater than the length of the actual array)
+        {
+            for(long j = numberofThreads * avgThreadsIter - avgThreadsIter; j <= length - 1; j++)
+            {
+                if(array[j] == 1)
+                {   
+                    // #pragma omp critical
+                    cache.counter+=1;
+                    if(j <= 284*1000)
+                        cache.array[j] = cache.counter;
+                }
+                // #pragma omp critical
+                iter +=1;
+            }
+        }
+        // countCache = cache.counter;
+        for(long i = 0; i < sizeof(cache.array); i++)
+        {
+            if(cache.array[i] == NULL)
+                cache.array[i] = '0';
+        }
+        countCache += cache.counter;
     }
 }
 
@@ -55,9 +146,9 @@ REQUIRES: nothing
 
 EFFECTS: return the actual number of ones in the array
 */
-int count1s ()
+long count1s ()
 {
-    int i;
+    long i;
     for (i=0; i<length; i++)
     {
         if (array[i] == 1)
@@ -75,26 +166,29 @@ int main()
     for(int i = 0; i < 100; i++)
     {
         array = (long*)malloc(sizeof(long)*length);
-        pthread_t threadsArray[numberofThreads];
+        pthread_t threadsArray[numberofThreads];    //array of threads
 
         for(long i = 0; i < length; i++)
         {
             array[i] = rand() % 5;
         }
-        for(int i = 0; i < numberofThreads; i++)
+        for(long i = 0; i < numberofThreads; i++)
         {
-            pthread_create(&threadsArray[i], NULL, &cacheFunc,(void*) i);
+            pthread_create(&threadsArray[i], NULL, &cacheFunc,(void*) i);   //create threads
         }
-        for(int k = 0; k < numberofThreads; k++)
+        for(long k = 0; k < numberofThreads; k++)
         {
-            pthread_join(threadsArray[k], NULL);
+            pthread_join(threadsArray[k], NULL);    //join threads (waits to terminate)
         }
-        totalTime = clock();
         count1s();
+        totalTime = clock();    //start clock
+        if(count == countCache)
+            countAccurate +=1;
     }
 
     printf("Count of Ones: %d\n", countCache);
     printf("Total Time: %f\n", (double)totalTime/(double)CLOCKS_PER_SEC);
     printf("Count of Iterations: %d\n", iter);
-    printf("Actual Count of Ones: %d", count);
+    printf("Actual Count of Ones: %d\n", count);
+    printf("Count of correct answers: %d\n", countAccurate);
 }
