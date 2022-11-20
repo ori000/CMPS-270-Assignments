@@ -83,8 +83,8 @@ TEST CASE 51: Array of size > 0 and 0 Threads => checked
 TEST CASE 52: Out of bounds exception => checked
 */
 
-#define numberofThreads 64
-#define length 100
+#define numberofThreads 8
+#define length 1000000
 void* private (void* threadID);
 long count1s ();
 

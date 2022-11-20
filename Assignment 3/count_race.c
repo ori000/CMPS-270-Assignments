@@ -69,7 +69,7 @@ TEST CASE 52: Out of bounds exception => checked
 */
 
 #define numberofThreads 64
-#define length 100000
+#define length 100
 void* race (void* threadID);
 long count1s();
 
